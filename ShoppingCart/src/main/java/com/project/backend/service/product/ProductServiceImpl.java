@@ -42,7 +42,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("Product not found for id :: " + id));
+				.orElseThrow(() -> new ProductNotFoundException("Product not found"));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ProductServiceImpl implements IProductService {
 		return productRepository.findById(productId)
 				.map(existingProducts -> updateExistingProduct(existingProducts, request))
 				.map(productRepository::save)
-				.orElseThrow(() -> new ProductNotFoundException("Product not found for id :: " + productId));
+				.orElseThrow(() -> new ProductNotFoundException("Product not found"));
 	}
 
 	private Product updateExistingProduct(Product existingProduct, UpdateProductRequest request) {
@@ -67,8 +67,9 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public void deleteProductById(Long id) {
-		productRepository.findById(id).ifPresentOrElse(productRepository::delete,
-				() -> new ProductNotFoundException("Product not found for id :: " + id));
+		productRepository.findById(id).ifPresentOrElse(productRepository::delete, () -> {
+			throw new ProductNotFoundException("Product not found");
+		});
 	}
 
 	@Override
