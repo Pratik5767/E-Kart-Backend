@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.project.backend.exception.ProductNotFoundException;
+import com.project.backend.exception.ResourceNotFoundException;
 import com.project.backend.model.Category;
 import com.project.backend.model.Product;
 import com.project.backend.repository.CategoryRepository;
@@ -42,7 +42,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("Product not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ProductServiceImpl implements IProductService {
 		return productRepository.findById(productId)
 				.map(existingProducts -> updateExistingProduct(existingProducts, request))
 				.map(productRepository::save)
-				.orElseThrow(() -> new ProductNotFoundException("Product not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 	}
 
 	private Product updateExistingProduct(Product existingProduct, UpdateProductRequest request) {
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public void deleteProductById(Long id) {
 		productRepository.findById(id).ifPresentOrElse(productRepository::delete, () -> {
-			throw new ProductNotFoundException("Product not found");
+			throw new ResourceNotFoundException("Product not found");
 		});
 	}
 
