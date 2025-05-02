@@ -2,6 +2,7 @@ package com.project.backend.service.product;
 
 import java.util.List;
 
+import com.project.backend.dto.ProductDto;
 import com.project.backend.model.Product;
 import com.project.backend.request.AddProductRequest;
 import com.project.backend.request.UpdateProductRequest;
@@ -29,4 +30,8 @@ public interface IProductService {
 	List<Product> getProductsByBrandAndName(String brand, String name);
 	
 	Long countProductsByBrandAndName(String brand, String name);
+
+	ProductDto convertToDto(Product product);
+
+	List<ProductDto> getConvertedProducts(List<Product> products);
 }
