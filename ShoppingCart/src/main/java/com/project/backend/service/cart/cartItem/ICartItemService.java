@@ -1,4 +1,4 @@
-package com.project.backend.service.cartItem;
+package com.project.backend.service.cart.cartItem;
 
 import com.project.backend.model.CartItem;
 

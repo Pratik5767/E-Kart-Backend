@@ -1,4 +1,4 @@
-package com.project.backend.service.cartItem;
+package com.project.backend.service.cart.cartItem;
 
 import java.math.BigDecimal;
 
@@ -49,7 +49,7 @@ public class CartItemServiceImpl implements ICartItemService {
 	@Override
 	public void removeItemFromCart(Long cartId, Long productId) {
 		Cart cart = cartService.getCart(cartId);
-		
+
 		CartItem itemToRemove = getCartItem(cartId, productId);
 		cart.removeItem(itemToRemove);
 		cartRepository.save(cart);
@@ -65,7 +65,8 @@ public class CartItemServiceImpl implements ICartItemService {
 					item.setUnitPrice(item.getProduct().getPrice());
 					item.setTotalPrice();
 				});
-		BigDecimal totalAmount = cart.getTotalAmount();
+		BigDecimal totalAmount = cart.getItems().stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO,
+				BigDecimal::add);
 		cart.setTotalAmount(totalAmount);
 		cartRepository.save(cart);
 	}
