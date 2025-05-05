@@ -14,4 +14,6 @@ public interface ICartService {
 
 	Long intializeNewCart();
 
+	Cart getCartByUserId(Long userId);
+
 }

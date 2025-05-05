@@ -3,11 +3,11 @@ package com.project.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.backend.model.Cart;
+import com.project.backend.model.User;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-	Cart findByUserId(Long userId);
-
+	Boolean existsByEmail(String email);
+	
 }
