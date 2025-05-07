@@ -48,8 +48,8 @@ public class CartServiceImpl implements ICartService {
 	public Long intializeNewCart() {
 		Cart newCart = new Cart();
 		long newCartId = cartIdGenerator.incrementAndGet();
-		newCart.setId(newCartId);
-		return cartRepository.save(newCart).getId();
+		newCart.setCartId(newCartId);
+		return cartRepository.save(newCart).getCartId();
 	}
 
 	@Override

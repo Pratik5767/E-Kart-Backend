@@ -31,7 +31,7 @@ public class CartItemServiceImpl implements ICartItemService {
 
 		CartItem cartItem = cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId))
 				.findFirst().orElse(new CartItem());
-		if (cartItem.getId() == null) {
+		if (cartItem.getItemId() == null) {
 			cartItem.setCart(cart);
 			cartItem.setProduct(product);
 			cartItem.setQuantity(quantity);
