@@ -34,9 +34,9 @@ public class CartItem {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id")
-	@JsonIgnore
 	private Cart cart;
 	
 	public void setTotalPrice() {

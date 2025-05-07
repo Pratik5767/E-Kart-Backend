@@ -1,12 +1,14 @@
 package com.project.backend.service.cart;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
 import com.project.backend.exception.ResourceNotFoundException;
 import com.project.backend.model.Cart;
+import com.project.backend.model.User;
 import com.project.backend.repository.CartItemRepository;
 import com.project.backend.repository.CartRepository;
 
@@ -45,11 +47,12 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Long intializeNewCart() {
-		Cart newCart = new Cart();
-		long newCartId = cartIdGenerator.incrementAndGet();
-		newCart.setId(newCartId);
-		return cartRepository.save(newCart).getId();
+	public Cart intializeNewCart(User user) {
+		return Optional.ofNullable(getCartByUserId(user.getId())).orElseGet(() -> {
+			Cart cart = new Cart();
+			cart.setUser(user);
+			return cartRepository.save(cart);
+		});
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.project.backend.service.cart;
 import java.math.BigDecimal;
 
 import com.project.backend.model.Cart;
+import com.project.backend.model.User;
 
 public interface ICartService {
 	
@@ -12,8 +13,8 @@ public interface ICartService {
 	
 	BigDecimal getTotalPrice(Long id);
 
-	Long intializeNewCart();
-
 	Cart getCartByUserId(Long userId);
+
+	Cart intializeNewCart(User user);
 
 }
