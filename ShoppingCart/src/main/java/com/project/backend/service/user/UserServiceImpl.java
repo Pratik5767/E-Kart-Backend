@@ -2,8 +2,10 @@ package com.project.backend.service.user;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.project.backend.dto.UserDto;
 import com.project.backend.exception.AlreadyExistsException;
 import com.project.backend.exception.ResourceNotFoundException;
 import com.project.backend.model.User;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements IUserService {
 
 	private final UserRepository userRepository;
+	private final ModelMapper modelMapper;
 
 	@Override
 	public User getUserById(Long userId) {
@@ -52,4 +55,8 @@ public class UserServiceImpl implements IUserService {
 		});
 	}
 
+	@Override
+	public UserDto convertToDto(User user) {
+		return modelMapper.map(user, UserDto.class);
+	}
 }
