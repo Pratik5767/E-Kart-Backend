@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.backend.dto.ProductDto;
+import com.project.backend.exception.AlreadyExistsException;
 import com.project.backend.exception.ResourceNotFoundException;
 import com.project.backend.model.Product;
 import com.project.backend.request.AddProductRequest;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.CONFLICT;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -58,8 +60,8 @@ public class ProductController {
 			Product newProduct = productService.addProduct(product);
 			ProductDto productDto = productService.convertToDto(newProduct);
 			return ResponseEntity.ok(new ApiResponse("Product added successfully", productDto));
-		} catch (Exception e) {
-			return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+		} catch (AlreadyExistsException e) {
+			return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
 		}
 	}
 

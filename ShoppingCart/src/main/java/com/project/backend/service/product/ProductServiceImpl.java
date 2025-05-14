@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.backend.dto.ImageDto;
 import com.project.backend.dto.ProductDto;
+import com.project.backend.exception.AlreadyExistsException;
 import com.project.backend.exception.ResourceNotFoundException;
 import com.project.backend.model.Category;
 import com.project.backend.model.Image;
@@ -31,6 +32,11 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product addProduct(AddProductRequest request) {
+		if (productExists(request.getName(), request.getBrand())) {
+			throw new AlreadyExistsException(request.getBrand() + " " + request.getName()
+					+ " already exists, you may update this product instead");
+		}
+
 		Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
 				.orElseGet(() -> {
 					Category newCategory = new Category(request.getCategory().getName());
@@ -39,6 +45,10 @@ public class ProductServiceImpl implements IProductService {
 
 		request.setCategory(category);
 		return productRepository.save(createProduct(request, category));
+	}
+
+	private Boolean productExists(String name, String brand) {
+		return productRepository.existsByNameAndBrand(name, brand);
 	}
 
 	private Product createProduct(AddProductRequest request, Category category) {
@@ -116,17 +126,15 @@ public class ProductServiceImpl implements IProductService {
 	public List<ProductDto> getConvertedProducts(List<Product> products) {
 		return products.stream().map(this::convertToDto).toList();
 	}
-	
+
 	@Override
 	public ProductDto convertToDto(Product product) {
 		ProductDto productDto = modelMapper.map(product, ProductDto.class);
-		
+
 		List<Image> images = imageRepository.findByProductId(product.getId());
-		List<ImageDto> imageDtos = images.stream()
-				.map(image -> modelMapper.map(image, ImageDto.class))
-				.toList();
+		List<ImageDto> imageDtos = images.stream().map(image -> modelMapper.map(image, ImageDto.class)).toList();
 		productDto.setImages(imageDtos);
 		return productDto;
 	}
-	
+
 }
